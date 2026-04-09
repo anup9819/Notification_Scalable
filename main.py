@@ -3,9 +3,12 @@ from pydantic import BaseModel
 from typing import Literal
 import redis 
 import uuid
+import json
+from kafka import KafkaProducer
 
 app = FastAPI()
 redis_client = redis.Redis(host="localhost",port= 6379, decode_responses=True)
+producer = KafkaProducer(bootstrap_server="localhost:9092", value_serializer=lambda v: json.dumps(v).encode("utf-8") )
 
 #the messege user wantes to send 
 class NotificationRequest(BaseModel):
